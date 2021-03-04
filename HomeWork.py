@@ -1,36 +1,36 @@
+import time
 import requests
-import hashlib
-class Countrie():
+def parametred_log_decorator(name_file):
+    def log_decorator(old_function):
+        def new_function(*args, **kwargs):
+            time_calling = time.asctime()
+            name_foo = old_function.__name__
+            result = old_function(*args)
+            with open("Information about foo", "w", encoding="utf-8") as f:
+                f.write(f'Вызвана функция {name_foo}\n')
+                if kwargs.get(None):
+                    f.write(f'С аргументами {args}')
+                else:
+                    f.write(f'С аргументами {args} и {kwargs}\n')
+                    f.write(f'{time_calling}\n')
+                    f.write(f'Возвращенo значение функции {result}\n')
+            return
+        return new_function
+    return log_decorator
 
-    def __init__(self, url, file):
-        self.url = url
-        self.file = file
 
-    def create_link(self):
-        response = requests.get(self.url).json()
-        with open(self.file, "w", encoding = "UTF-8") as f:
-            for countrie in response:
-                link = "https://en.wikipedia.org/wiki/" + countrie["name"]["official"]
-                f.write(countrie["name"]["official"] + ":" + link + "\n")
-Countrie("https://raw.githubusercontent.com/mledoze/countries/master/countries.json",
-         "Countrie - Wikilink").create_link()
-
+@parametred_log_decorator('Information about foo')
+#def sum(a, b):
+    #return a + b
 def exctraction_md5(url):
     response = requests.get(url, stream=True).json()
     for element in response:
         for k, v in element.items():
             hash_object_1 = hashlib.sha1(k.encode())
             hex_dig = hash_object_1.hexdigest()
-            for name, value in v.items():
-                hash_object_2 = hashlib.sha1(name.encode())
-                for position, value_position in v
-                hash_object_3 = hashlib.sha1(value.encode())
+            yield hex_dig
 
-            #print(hash_object.hexdigest())
-                yield hex_dig, hash_object_2, hash_object_3
-
-for string in exctraction_md5("https://raw.githubusercontent.com/mledoze/countries/master/countries.json"):
-    print(string)
+exctraction_md5('https://github.com/mledoze/countries/blob/master/countries.json')
 
 
 
