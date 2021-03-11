@@ -14,7 +14,7 @@ def parametred_log_decorator(name_file):
                     f.write(f'С аргументами {args} и {kwargs}\n')
                     f.write(f'{time_calling}\n')
                     f.write(f'Возвращенo значение функции {result}\n')
-            return
+            return result
         return new_function
     return log_decorator
 
